@@ -1,0 +1,63 @@
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def load_data():
+    # Load or generate your dataset (replace this with your data loading logic)
+    # Example: X, y = load_your_data()
+    pass
+
+def split_data(X, y):
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    return X_train, X_test, y_train, y_test
+
+def train_knn(X_train, y_train, n_neighbors=3):
+    # Instantiate KNeighborsClassifier
+    knn_model = KNeighborsClassifier(n_neighbors=n_neighbors)
+    
+    # Fit the model on the training data
+    knn_model.fit(X_train, y_train)
+    
+    return knn_model
+
+def evaluate_model(model, X_test, y_test):
+    # Make predictions on the test data
+    y_pred = model.predict(X_test)
+    
+    # Calculate accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy:.2f}")
+    
+    # Display confusion matrix
+    plot_confusion_matrix(y_test, y_pred)
+
+def plot_confusion_matrix(y_true, y_pred):
+    # Generate confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+    
+    # Plot confusion matrix using seaborn
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.show()
+
+def main():
+    # Load or generate your dataset
+    X, y = load_data()
+
+    # Split the data
+    X_train, X_test, y_train, y_test = split_data(X, y)
+
+    # Train KNN model
+    knn_model = train_knn(X_train, y_train)
+
+    # Evaluate the model
+    evaluate_model(knn_model, X_test, y_test)
+
+if __name__ == "__main__":
+    main()
